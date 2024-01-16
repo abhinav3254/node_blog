@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { login, signup } = require('../service/userService');
 
+
+/**
+ * 
+ * route for login of user
+ * 
+ * this method is just for routing to service layer
+ * and all the logics are in userService file
+ * 
+ * @author abhinav3254
+ */
 router.get('/login', async (req, res) => {
     const loginResult = await login();
 
@@ -12,6 +22,16 @@ router.get('/login', async (req, res) => {
     }
 });
 
+
+/**
+ * 
+ * route for signup
+ * 
+ * this method is just for routing to service layer
+ * and all the logics are in userService file
+ * 
+ * @author abhinav3254
+ */
 router.get('/signup', (req, res) => {
     const signupResult = signup();
 
@@ -23,4 +43,6 @@ router.get('/signup', (req, res) => {
 });
 
 
+
+// exporting this module
 module.exports = router;
