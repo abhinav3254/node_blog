@@ -1,3 +1,7 @@
+/**
+ * Main index.js file
+ * @author abhinav3254
+ */
 const express = require('express');
 const PORT = 9000;
 require('./src/db/db-pg');
