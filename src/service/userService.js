@@ -1,3 +1,9 @@
+/**
+ * 
+ * @returns json format for success or failure message
+ * 
+ * @author abhinav3254
+ */
 async function login() {
     try {
         // For demonstration purposes, hardcoded success message
@@ -7,6 +13,13 @@ async function login() {
     }
 }
 
+
+/**
+ * 
+ * @returns json of success or failure message
+ * 
+ * @author abhinav3254
+ */
 async function signup() {
     try {
         // For demonstration purposes, hardcoded success message
