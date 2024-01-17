@@ -30,7 +30,33 @@ Include instructions on how to get the project up and running on a local machine
 
 ### Prerequisites
 
-List any prerequisites or dependencies that need to be installed before running the project.
+Certainly! Here's an updated list with download links for the mentioned prerequisites:
+
+### Prerequisites
+
+1. **Node:**
+   - Download and install Node.js from [here](https://nodejs.org/).
+
+2. **Express:**
+   - Install Express using the following command in your project folder:
+     ```bash
+     npm install express
+     ```
+
+3. **JavaScript:**
+   - JavaScript is a scripting language and doesn't require separate installation as it's supported by web browsers. Ensure you have a modern browser that supports JavaScript.
+
+4. **PostgreSQL:**
+   - Download and install PostgreSQL from [here](https://www.postgresql.org/download/).
+
+5. **jsonwebtoken:**
+   - Install the `jsonwebtoken` package using the following command in your project folder:
+     ```bash
+     npm install jsonwebtoken
+     ```
+
+Make sure to run the `npm install` commands in your project directory, where your `package.json` is located, to install the required packages locally.
+
 
 ### Installation
 
