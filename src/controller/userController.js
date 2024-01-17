@@ -16,10 +16,10 @@ router.post('/login', async (req, res) => {
 
     const { username, password } = req.body;
 
-    const loginResult = await login();
+    const loginResult = await login(username, password);
 
     if (loginResult.success) {
-        res.json({ success: true, user: loginResult.user, message: loginResult.message, username: username, password: password });
+        res.json({ success: true, user: loginResult.user, message: loginResult.message });
     } else {
         res.status(401).json({ success: false, message: loginResult.message });
     }

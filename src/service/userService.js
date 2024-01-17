@@ -6,12 +6,29 @@ const client = require('../db/db-pg');
  * 
  * @author abhinav3254
  */
-async function login() {
+async function login(username, password) {
+    const query = 'SELECT * FROM users WHERE username = $1';
+
     try {
-        return { success: true, message: 'Login successful', user: { username: 'ab' } };
+        const result = await client.query(query, [username]);
+
+        if (result.rows.length === 0) {
+            // No user found with the given username
+            return { success: false, message: 'User not found', user: null };
+        }
+
+        const user = result.rows[0];
+
+        if (user.password === password) {
+            return { success: true, message: 'Login successful' };
+        } else {
+            return { success: false, message: 'Login failed' };
+        }
+
     } catch (error) {
-        throw error;
+        return { success: false, message: 'Error in login', error: error };
     }
+
 }
 
 
