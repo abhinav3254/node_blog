@@ -12,11 +12,14 @@ const { login, signup } = require('../service/userService');
  * 
  * @author abhinav3254
  */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
+
+    const { username, password } = req.body;
+
     const loginResult = await login();
 
     if (loginResult.success) {
-        res.json({ success: true, user: loginResult.user, message: loginResult.message });
+        res.json({ success: true, user: loginResult.user, message: loginResult.message, username: username, password: password });
     } else {
         res.status(401).json({ success: false, message: loginResult.message });
     }
@@ -32,7 +35,8 @@ router.get('/login', async (req, res) => {
  * 
  * @author abhinav3254
  */
-router.get('/signup', (req, res) => {
+router.post('/signup', (req, res) => {
+
     const signupResult = signup();
 
     if (signupResult.success) {
