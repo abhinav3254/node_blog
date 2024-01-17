@@ -55,20 +55,132 @@ Explain how to use your project. Provide examples or code snippets to guide user
 
 List and describe the available API endpoints. Include details such as HTTP methods, request/response formats, and any required parameters.
 
-- **POST /login**
-  - Description: Log in a user.
-  - Request: JSON body with `username` and `password`.
-  - Response: JSON with login status and token.
+Certainly! Below are full examples for the described API endpoints:
 
-- **POST /signup**
-  - Description: Register a new user.
-  - Request: JSON body with user details.
-  - Response: JSON with signup status and user information.
+### POST /login
 
-- **GET /test**
-  - Description: Test endpoint requiring JWT authentication.
-  - Request: Include a valid JWT token in the header.
-  - Response: JSON with authentication status and user information.
+- **Description:** Log in a user.
+  
+- **Request:**
+  - Method: POST
+  - Endpoint: `/login`
+  - Headers:
+    - Content-Type: application/json
+  - Body:
+    ```json
+    {
+      "username": "example_user",
+      "password": "example_password"
+    }
+    ```
+
+- **Response:**
+  - Status: 200 OK
+  - Body:
+    ```json
+    {
+      "success": true,
+      "message": "Login successful",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+  - Status: 401 Unauthorized
+  - Body:
+    ```json
+    {
+      "success": false,
+      "message": "Login failed"
+    }
+    ```
+
+### POST /signup
+
+- **Description:** Register a new user.
+
+- **Request:**
+  - Method: POST
+  - Endpoint: `/signup`
+  - Headers:
+    - Content-Type: application/json
+  - Body:
+    ```json
+    {
+      "name": "John Doe",
+      "age": 25,
+      "phone_number": "1234567890",
+      "email": "john.doe@example.com",
+      "username": "john_doe",
+      "gender": "male",
+      "password": "secure_password"
+    }
+    ```
+
+- **Response:**
+  - Status: 200 OK
+  - Body:
+    ```json
+    {
+      "success": true,
+      "message": "Signup successful",
+      "result": {
+        "id": 1,
+        "name": "John Doe",
+        "age": 25,
+        "phone_number": "1234567890",
+        "email": "john.doe@example.com",
+        "username": "john_doe",
+        "gender": "male",
+        "password": "secure_password"
+      }
+    }
+    ```
+  - Status: 400 Bad Request
+  - Body:
+    ```json
+    {
+      "success": false,
+      "message": "All fields are required"
+    }
+    ```
+
+### GET /test
+
+- **Description:** Test endpoint requiring JWT authentication.
+
+- **Request:**
+  - Method: GET
+  - Endpoint: `/test`
+  - Headers:
+    - Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+- **Response:**
+  - Status: 200 OK
+  - Body:
+    ```json
+    {
+      "success": true,
+      "message": "JWT authentication is working",
+      "user": {
+        "username": "example_user"
+      }
+    }
+    ```
+  - Status: 401 Unauthorized
+  - Body:
+    ```json
+    {
+      "success": false,
+      "message": "Unauthorized: No token provided"
+    }
+    ```
+  - Status: 403 Forbidden
+  - Body:
+    ```json
+    {
+      "success": false,
+      "message": "Forbidden: Invalid token"
+    }
+    ```
 
 ## Authentication
 
