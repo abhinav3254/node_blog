@@ -17,16 +17,18 @@ const client = new Client({
  * Function to create user table
  */
 function createUserTable() {
-    const query = `CREATE TABLE IF NOT EXISTS "user" (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        age INT,
-        phone_number VARCHAR(10),
-        email VARCHAR(55),
-        username VARCHAR(25),
-        gender VARCHAR(6),
-        password VARCHAR(15)
-    );`;
+    const query = `
+  CREATE TABLE IF NOT EXISTS "users" (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    age INT,
+    phone_number VARCHAR(10) UNIQUE NOT NULL,
+    email VARCHAR(55) UNIQUE NOT NULL,
+    username VARCHAR(25),
+    gender VARCHAR(6),
+    password VARCHAR(15)
+  );
+`;
 
     client.query(query, (error, result) => {
         if (error) {

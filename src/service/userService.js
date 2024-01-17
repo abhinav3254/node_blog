@@ -1,3 +1,5 @@
+const client = require('../db/db-pg');
+
 /**
  * 
  * @returns json format for success or failure message
@@ -6,7 +8,6 @@
  */
 async function login() {
     try {
-        // For demonstration purposes, hardcoded success message
         return { success: true, message: 'Login successful', user: { username: 'ab' } };
     } catch (error) {
         throw error;
@@ -20,12 +21,14 @@ async function login() {
  * 
  * @author abhinav3254
  */
-async function signup() {
+async function signup(name, age, phone_number, email, username, gender, password) {
     try {
-        // For demonstration purposes, hardcoded success message
-        return { success: true, message: 'Signup successful' };
+        const query = "INSERT INTO users(name, age, phone_number, email, username, gender, password) VALUES($1, $2, $3, $4, $5, $6, $7)";
+        const result = await client.query(query, [name, age, phone_number, email, username, gender, password]);
+        return { success: true, message: 'Signup successful', result: result.rows[0] };
     } catch (error) {
-        throw error;
+        console.error('Error in signup:', error);
+        throw error; // Propagate the error
     }
 }
 
