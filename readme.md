@@ -223,7 +223,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-- [MIT](https://www.npmjs.com/)
+- [npm](https://www.npmjs.com/)
 - [Medium](https://medium.com/)
 - [Node.js](https://nodejs.org/en)
 - [Express.js](https://expressjs.com/)
