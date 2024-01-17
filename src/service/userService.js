@@ -16,10 +16,37 @@ async function login() {
 
 
 /**
+ * Signup Function
+ *
+ * This function handles user signup by performing the following steps:
+ *
+ * 1. Validate user input for name, age, phone_number, email, username, gender, and password.
+ *    - Ensure that the input values meet the required criteria, and return an error message if validation fails.
+ *
+ * 2. Check if the provided email, phone number, and username already exist in the database.
+ *    - If any of them already exists, return an error message indicating the duplication.
+ *
+ * 3. Insert the user's information into the "users" table in the database.
+ *    - Use parameterized queries to prevent SQL injection.
+ *
+ * 4. Return a success message along with the inserted user's information.
+ *    - If an error occurs during the process, handle specific error codes, such as '22001'.
+ *      Return an error message for invalid field values.
+ *
+ * @param {string} name - User's name.
+ * @param {number} age - User's age.
+ * @param {string} phone_number - User's phone number.
+ * @param {string} email - User's email.
+ * @param {string} username - User's username.
+ * @param {string} gender - User's gender.
+ * @param {string} password - User's password.
+ *
+ * @returns {object} - An object containing success status, message, and user information.
+ *                   - If an error occurs, it may include specific error information.
+ *
+ * @throws {error} - Propagates any unhandled errors.
  * 
- * @returns json of success or failure message
- * 
- * @author abhinav3254
+ * @author abhinav3254 - 17 Jan 2024
  */
 async function signup(name, age, phone_number, email, username, gender, password) {
     try {
