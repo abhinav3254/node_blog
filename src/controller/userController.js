@@ -1,39 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const { login, signup } = require('../service/userService');
+const authenticateJWT = require('../middleware/jwtMiddleware')
 
 
 /**
+ * Route for handling user login.
  * 
- * route for login of user
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
  * 
- * this method is just for routing to service layer
- * and all the logics are in userService file
+ * @returns {json} - JSON response indicating success or failure.
  * 
  * @author abhinav3254
  */
 router.post('/login', async (req, res) => {
-
     const { username, password } = req.body;
-
     const loginResult = await login(username, password);
 
     if (loginResult.success) {
-        res.json({ success: true, user: loginResult.user, message: loginResult.message });
+        res.json({ success: true, message: loginResult.message, token: loginResult.token });
     } else {
         res.status(401).json({ success: false, message: loginResult.message });
     }
 });
 
 
+
 /**
+ * Route for handling user signup.
  * 
- * route for signup
- * 
- * this method is just for routing to service layer
- * and all the logics are in userService file
+ * This method routes the signup request to the service layer, which contains the business logic.
+ * Validates required fields in the request body and returns JSON responses accordingly.
  * 
  * @author abhinav3254
+ * 
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * 
+ * @returns {json} - JSON response indicating success or failure of the signup process.
  */
 router.post('/signup', async (req, res) => {
 
@@ -54,6 +59,16 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+
+/**
+ * Route to check if JWT authentication is working
+ * This route is protected and requires a valid JWT to access it.
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ */
+router.get('/test', authenticateJWT, (req, res) => {
+    res.json({ success: true, message: 'JWT authentication is working' });
+});
 
 
 // exporting this module

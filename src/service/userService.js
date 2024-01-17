@@ -1,8 +1,20 @@
 const client = require('../db/db-pg');
 
+const jwt = require('jsonwebtoken');
+const secretKey = 'abhinav';
+
 /**
+ * User login function.
  * 
- * @returns json format for success or failure message
+ * This method attempts to authenticate a user based on the provided username and password.
+ * Queries the database to find a user with the given username and compares the password.
+ * If successful, generates a JSON Web Token (JWT) and returns a success response with the token.
+ * If unsuccessful, returns a failure response.
+ * 
+ * @param {string} username - The username of the user trying to log in.
+ * @param {string} password - The password of the user trying to log in.
+ * 
+ * @returns {object} - JSON object containing success status, message, and token (if login is successful).
  * 
  * @author abhinav3254
  */
@@ -20,7 +32,8 @@ async function login(username, password) {
         const user = result.rows[0];
 
         if (user.password === password) {
-            return { success: true, message: 'Login successful' };
+            const token = generateToken(username);
+            return { success: true, message: 'Login successful', token: token };
         } else {
             return { success: false, message: 'Login failed' };
         }
@@ -29,6 +42,32 @@ async function login(username, password) {
         return { success: false, message: 'Error in login', error: error };
     }
 
+}
+
+
+
+/**
+ * Generates a JSON Web Token (JWT) for the provided username.
+ * 
+ * This function uses the provided username to create a payload for the JWT
+ * and signs it using the secret key with a specified expiration time.
+ * 
+ * @param {string} username - The username for which the token is generated.
+ * 
+ * @returns {string} - The generated JWT token.
+ */
+
+function generateToken(username) {
+    const payload = {
+        username: username,
+    };
+
+    const options = {
+        // Set the expiration time of the token
+        expiresIn: '1h',
+    };
+
+    return jwt.sign(payload, secretKey, options);
 }
 
 
