@@ -11,7 +11,6 @@ const secretKey = 'abhinav';
  */
 function getPayloadData(req, callback) {
     // Extract the token from the Authorization header
-    console.log('hello abhinav')
     const token = req.header('Authorization');
 
     // Check if a token is provided in the request header

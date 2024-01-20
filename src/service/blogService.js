@@ -35,7 +35,7 @@ async function postANewBlog(title, content, tag, category, userId) {
 
         // Level 3: Logging
         // Logging the details of the newly posted blog
-        console.log("New blog posted:", { title, content, tag, category, userId });
+        // console.log("New blog posted:", { title, content, tag, category, userId });
 
         // Level 4: Success Message
         // Returning a success message indicating that a new blog has been posted
