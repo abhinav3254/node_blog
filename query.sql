@@ -10,3 +10,12 @@ CREATE TABLE IF NOT EXISTS "users" (
     gender VARCHAR(6),
     password VARCHAR(15)
   );
+
+
+-- for comment section
+  CREATE TABLE IF NOT EXISTS blog_comments (
+    id SERIAL PRIMARY KEY,
+	username varchar(255) not null,
+	blog_id int,
+	date timestamp default current_timestamp
+	);

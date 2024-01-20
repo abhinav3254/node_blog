@@ -66,6 +66,23 @@ function createBlogTable() {
     });
 }
 
+function createCommentsTables() {
+    const query = `
+    CREATE TABLE IF NOT EXISTS blog_comments (
+        id SERIAL PRIMARY KEY,
+        username varchar(255) not null,
+        blog_id int,
+        date timestamp default current_timestamp
+        );`;
+    client.query(query, (error, result) => {
+        if (error) {
+            console.log(`Error creating comments table: ${error}`);
+        } else {
+            console.log(`Created comments table successfully!`);
+        }
+    });
+}
+
 /**
  * Checking whether the application is connected to the database or not
  */
@@ -75,6 +92,7 @@ client.connect()
         // Creating user table
         createUserTable();
         createBlogTable();
+        createCommentsTables();
     })
     .catch((err) => {
         console.log(`Error connecting to the database: ${err}`);
