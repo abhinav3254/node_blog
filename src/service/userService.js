@@ -30,9 +30,10 @@ async function login(username, password) {
         }
 
         const user = result.rows[0];
+        const userId = user.id;
 
         if (user.password === password) {
-            const token = generateToken(username);
+            const token = generateToken(username, userId);
             return { success: true, message: 'Login successful', token: token };
         } else {
             return { success: false, message: 'Login failed' };
@@ -57,9 +58,10 @@ async function login(username, password) {
  * @returns {string} - The generated JWT token.
  */
 
-function generateToken(username) {
+function generateToken(username, userId) {
     const payload = {
         username: username,
+        userid: userId
     };
 
     const options = {
