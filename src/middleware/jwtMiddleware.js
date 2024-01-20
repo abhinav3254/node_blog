@@ -42,5 +42,5 @@ function authenticateJWT(req, res, next) {
     });
 }
 
-// Export the middleware for use in other parts of the application
+
 module.exports = authenticateJWT;

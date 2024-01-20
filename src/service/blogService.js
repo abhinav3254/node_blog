@@ -11,9 +11,11 @@ async function getAllTheBlogs() {
     }
 }
 
-async function postANewBlog() {
+async function postANewBlog(title, content, tag, category) {
     try {
+        const query = "INSERT INTO POSTS (TITLE,CONTENT,TAG,CATEGORY,USERNAME,DATE) VALUES (?,?,?,?,?)";
 
+        console.log(title, content, tag, category);
         return { message: 'new blog posted' };
 
     } catch (err) {
