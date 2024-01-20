@@ -13,23 +13,26 @@ router.post('/post', authenticateJWT, async (req, res) => {
     try {
         const { title, content, tag, category } = req.body;
 
-        // Use async/await to get the username from the JWT
-        const username = await new Promise((resolve, reject) => {
+        // Use async/await to get the user details from the JWT
+        const userDetails = await new Promise((resolve, reject) => {
             getPayloadData(req, (err, decoded) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(decoded.username);
+                    resolve(decoded);
                 }
             });
         });
 
-        console.log(`Username is my: ${username}`);
+        // console.log(`Username is my: ${userDetails.username}`);
+        // console.log(`Userid is my: ${userDetails.userid}`);
 
-        // Assuming blogService.postANewBlog is an asynchronous function
-        const service = await blogService.postANewBlog(title, content, tag, category, username);
+        const username = userDetails.username;
+        const userId = userDetails.userid;
 
-        res.status(201).send({ message: 'Want to insert a new blog', service: service });
+        const service = await blogService.postANewBlog(title, content, tag, category, userId);
+
+        res.status(201).send({ message: service.message });
     } catch (error) {
         console.error('Error in /post route:', error.message);
         res.status(500).json({ success: false, message: 'Internal Server Error' });

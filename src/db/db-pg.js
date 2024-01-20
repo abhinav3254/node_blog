@@ -51,9 +51,9 @@ function createBlogTable() {
         content VARCHAR(2000) NOT NULL,
         tag VARCHAR(55) NOT NULL,
         category VARCHAR(55) NOT NULL,
-        username VARCHAR(25) NOT NULL,
+        user_id int NOT NULL,
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );    
+    ); 
 `;
 
     client.query(query, (error, result) => {

@@ -29,26 +29,14 @@ function getPayloadData(req, callback) {
             // console.log('Decoded JWT payload:', decoded);
 
             // You can access specific claims from the payload
-            // console.log('User ID:', decoded.userId);
+            // console.log('User ID:', decoded.userid);
             // console.log('Username:', decoded.username);
-        }
 
-        // Call the provided callback with the result
-        callback(err, decoded);
+            // Call the provided callback with the result
+            callback(null, { userid: decoded.userid, username: decoded.username });
+        }
     });
 }
-
-// Example usage in an Express route
-// app.get('/protected-route', (req, res) => {
-//     getPayloadData(req, (err, decoded) => {
-//         if (err) {
-//             return res.status(401).json({ success: false, message: err.message });
-//         }
-
-//         // Proceed with handling the decoded payload
-//         res.json({ success: true, user: decoded });
-//     });
-// });
 
 // Export the function for use in other parts of the application
 module.exports = getPayloadData;
