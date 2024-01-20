@@ -1,10 +1,8 @@
 const client = require('../db/db-pg');
-const PaginatedBlogDto = require('../dto/PaginatedBlogDto')
-
-
+const { PaginatedBlogDto, CommentDto, BlogDto } = require('../dto/PaginatedBlogDto');
 
 /**
- * Retrieves paginated blogs from the database.
+ * Retrieves paginated blogs with comments from the database.
  *
  * @param {number} page - The page number.
  * @param {number} pageSize - The number of blogs to retrieve per page.
@@ -16,28 +14,69 @@ async function getPaginatedBlogs(page, pageSize) {
         const offset = (page - 1) * pageSize;
 
         // Level 2: Building the SQL Query with Pagination
-        // Constructing the SQL query to retrieve paginated blogs
-        const query = "SELECT * FROM blogs ORDER BY id LIMIT $1 OFFSET $2";
+        // Constructing the SQL query to retrieve paginated blogs with comments
+        const query = `
+            SELECT b.*, c.comment_content, c.username AS comment_username, c.date AS comment_date
+            FROM blogs b
+            LEFT JOIN blog_comments c ON b.id = c.blog_id
+            ORDER BY b.id
+            LIMIT $1 OFFSET $2
+        `;
 
         // Level 3: Executing the Database Query
-        // Executing the query to retrieve paginated blogs
+        // Executing the query to retrieve paginated blogs with comments
         const result = await client.query(query, [pageSize, offset]);
 
-        // Level 4: Calculate Total Pages and Total Blogs
-        const totalBlogs = result.rowCount;
+        // Level 4: Organizing Results
+        // Grouping blogs and comments based on blog id
+        const blogsWithComments = result.rows.reduce((acc, blog) => {
+            const existingBlog = acc.find(item => item.id === blog.id);
+            if (existingBlog) {
+                // If the blog already exists in the accumulator, add the comment using CommentDto
+                existingBlog.comments.push(new CommentDto(
+                    blog.comment_content,
+                    blog.comment_username,
+                    blog.comment_date
+                ));
+            } else {
+                // If the blog doesn't exist in the accumulator, create a new blog entry
+                acc.push(new BlogDto(
+                    blog.id,
+                    blog.title,
+                    blog.content,
+                    blog.tag,
+                    blog.category,
+                    blog.username,
+                    blog.date,
+                    blog.comment_content
+                        ? [new CommentDto(
+                            blog.comment_content,
+                            blog.comment_username,
+                            blog.comment_date
+                        )]
+                        : []
+                ));
+            }
+            return acc;
+        }, []);
+
+        // Level 5: Calculate Total Pages and Total Blogs
+        const totalBlogs = blogsWithComments.length;
         const totalPages = Math.ceil(totalBlogs / pageSize);
 
-        // Level 5: Success Response
-        // Returning a PaginatedBlogDto object with totalBlogs and pageSize information
-        return new PaginatedBlogDto('success', page, totalPages, totalBlogs, pageSize, result.rows);
+        // Level 6: Success Response
+        // Returning a PaginatedBlogDto object with totalBlogs, pageSize, and organized blogs with comments
+        return new PaginatedBlogDto('success', page, totalPages, totalBlogs, pageSize, blogsWithComments);
 
     } catch (err) {
-        // Level 6: Error Handling
+        // Level 7: Error Handling
         // Logging and re-throwing any errors that occur during the process
         console.error("Error retrieving paginated blogs:", err.message);
         throw err; // Re-throw the error to propagate it to the caller
     }
 }
+
+
 
 
 

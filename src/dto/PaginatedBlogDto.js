@@ -1,36 +1,58 @@
 /**
- * @typedef {Object} BlogDto
- * @property {number} id - The ID of the blog.
- * @property {string} title - The title of the blog.
- * @property {string} content - The content of the blog.
- * @property {string} tag - The tag of the blog.
- * @property {string} category - The category of the blog.
- * @property {string} username - The username associated with the blog.
- * @property {string} date - The date when the blog was created.
+ * DTO (Data Transfer Object) for representing a single comment.
  */
+class CommentDto {
+    /**
+     * @param {string} commentContent - The content of the comment.
+     * @param {string} commentUsername - The username associated with the comment.
+     * @param {string} commentDate - The date when the comment was created.
+     */
+    constructor(commentContent, commentUsername, commentDate) {
+        this.commentContent = commentContent;
+        this.commentUsername = commentUsername;
+        this.commentDate = commentDate;
+    }
+}
 
 /**
- * @typedef {Object} PaginatedBlogDto
- * @property {string} message - A message indicating the success status.
- * @property {number} currentPage - The current page number.
- * @property {number} totalPages - The total number of pages.
- * @property {number} totalBlogs - The total number of blogs.
- * @property {number} pageSize - The number of blogs sent in the current response.
- * @property {BlogDto[]} data - An array containing the retrieved paginated blog data.
+ * DTO (Data Transfer Object) for representing a single blog.
  */
-
+class BlogDto {
+    /**
+     * @param {number} id - The ID of the blog.
+     * @param {string} title - The title of the blog.
+     * @param {string} content - The content of the blog.
+     * @param {string} tag - The tag of the blog.
+     * @param {string} category - The category of the blog.
+     * @param {string} username - The username associated with the blog.
+     * @param {string} date - The date when the blog was created.
+     * @param {CommentDto[]} comments - An array containing comments associated with the blog.
+     */
+    constructor(id, title, content, tag, category, username, date, comments = []) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.tag = tag;
+        this.category = category;
+        this.username = username;
+        this.date = date;
+        this.comments = comments;
+    }
+}
 
 /**
  * DTO (Data Transfer Object) for the paginated blog response.
  */
 class PaginatedBlogDto {
     /**
+     * Creates an instance of PaginatedBlogDto.
+     *
      * @param {string} message - A message indicating the success status.
      * @param {number} currentPage - The current page number.
      * @param {number} totalPages - The total number of pages.
      * @param {number} totalBlogs - The total number of blogs.
      * @param {number} pageSize - The number of blogs sent in the current response.
-     * @param {Array} data - An array containing the retrieved paginated blog data.
+     * @param {BlogDto[]} data - An array containing the retrieved paginated blog data.
      */
     constructor(message, currentPage, totalPages, totalBlogs, pageSize, data) {
         this.message = message;
@@ -38,19 +60,25 @@ class PaginatedBlogDto {
         this.totalPages = totalPages;
         this.totalBlogs = totalBlogs;
         this.pageSize = pageSize;
-        this.data = data.map(blog => ({
-            id: blog.id,
-            title: blog.title,
-            content: blog.content,
-            tag: blog.tag,
-            category: blog.category,
-            username: blog.username,
-            date: blog.date,
-        }));
+        this.data = data.map(blog => new BlogDto(
+            blog.id,
+            blog.title,
+            blog.content,
+            blog.tag,
+            blog.category,
+            blog.username,
+            blog.date,
+            blog.comments.map(comment => new CommentDto(
+                comment.commentContent,
+                comment.commentUsername,
+                comment.commentDate
+            ))
+        ));
     }
 
     /**
      * Serializes the DTO to a plain JavaScript object.
+     *
      * @returns {Object} - The serialized object.
      */
     toJSON() {
@@ -66,6 +94,7 @@ class PaginatedBlogDto {
 
     /**
      * Deserializes the DTO from a plain JavaScript object.
+     *
      * @param {Object} obj - The object to deserialize.
      * @returns {PaginatedBlogDto} - The deserialized DTO.
      */
@@ -81,13 +110,4 @@ class PaginatedBlogDto {
     }
 }
 
-
-/**
- * 
- * // Example usage:
-    const serializedDto = paginatedBlogDtoInstance.toJSON();
-    const deserializedDto = PaginatedBlogDto.fromJSON(serializedDto);
- */
-
-
-module.exports = PaginatedBlogDto;
+module.exports = { PaginatedBlogDto, CommentDto, BlogDto };
