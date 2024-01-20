@@ -40,6 +40,9 @@ function createUserTable() {
 }
 
 
+/**
+ * Function to create blog table
+ */
 function createBlogTable() {
     const query = `
     CREATE TABLE IF NOT EXISTS blogs (
