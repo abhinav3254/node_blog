@@ -74,6 +74,7 @@ function createCommentsTables() {
     const query = `
     CREATE TABLE IF NOT EXISTS blog_comments (
         id SERIAL PRIMARY KEY,
+        comment_content varchar(500) not null,
         username varchar(255) not null,
         blog_id int,
         date timestamp default current_timestamp
