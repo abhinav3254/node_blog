@@ -42,7 +42,6 @@ async function getPaginatedBlogs(page, pageSize) {
 
 
 
-
 /**
  * Inserts a new blog post into the database.
  *
@@ -80,4 +79,46 @@ async function postANewBlog(title, content, tag, category, userId, username) {
 }
 
 
-module.exports = { getPaginatedBlogs, postANewBlog };
+
+
+
+/**
+ * Adds a new comment to a blog post.
+ *
+ * @param {string} comment - The content of the comment.
+ * @param {number} blog_id - The ID of the blog post.
+ * @param {string} username - The username of the commenter.
+ * @returns {Object} - An object containing the statusCode and a corresponding message.
+ */
+async function addNewComment(comment, blog_id, username) {
+    try {
+        // Check if the post exists
+        const isPostThereQuery = "SELECT * FROM blogs WHERE id = $1";
+        const isPostThereAnswer = await client.query(isPostThereQuery, [blog_id]);
+
+        if (isPostThereAnswer.rows.length > 0) {
+            // If the post exists, insert the new comment
+            const insertCommentQuery = "INSERT INTO blog_comments(comment_content, username, blog_id, date) VALUES ($1, $2, $3, NOW())";
+            const result = await client.query(insertCommentQuery, [comment, username, blog_id]);
+
+            // Return success status code and message
+            return { statusCode: 201, message: 'Comment added successfully' };
+        } else {
+            // If the post does not exist, return a not found status code and message
+            return { statusCode: 404, message: 'Post not found' };
+        }
+    } catch (err) {
+        // Handle specific error cases and return appropriate status code and message
+        if (err.code === '23505') {
+            // Unique constraint violation (duplicate comment)
+            return { statusCode: 409, message: 'Duplicate comment. Comment already exists.' };
+        } else {
+            // Return internal server error status code and message for other errors
+            console.error('Error in adding a new comment:', err.message);
+            return { statusCode: 500, message: 'Internal Server Error' };
+        }
+    }
+}
+
+
+module.exports = { getPaginatedBlogs, postANewBlog, addNewComment };

@@ -90,4 +90,55 @@ router.post('/post', authenticateJWT, async (req, res) => {
 });
 
 
+
+/**
+ * Route handler for adding a new comment to a blog post.
+ * Requires JWT authentication for user verification.
+ *
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ */
+router.post('/post/add/comment', authenticateJWT, async (req, res) => {
+    try {
+        // Extract comment and blog_id from the request body
+        const { comment, blog_id } = req.body;
+
+        // Use async/await to get the user details from the JWT
+        const userDetails = await new Promise((resolve, reject) => {
+            getPayloadData(req, (err, decoded) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(decoded);
+                }
+            });
+        });
+
+        // Call the blogService to add a new comment
+        const result = await blogService.addNewComment(comment, blog_id, userDetails.username);
+
+        // Check the status code from the result and respond accordingly
+        if (result.statusCode === 201) {
+            // Comment added successfully
+            res.status(result.statusCode).json({ success: true, message: result.message });
+        } else if (result.statusCode === 404) {
+            // Post not found
+            res.status(result.statusCode).json({ success: false, message: result.message });
+        } else if (result.statusCode === 409) {
+            // Duplicate comment
+            res.status(result.statusCode).json({ success: false, message: result.message });
+        } else {
+            // Internal server error
+            console.error('Error in /post/add/comment route:', result.message);
+            res.status(result.statusCode).json({ success: false, message: 'Internal Server Error' });
+        }
+    } catch (err) {
+        // Handle unexpected errors and respond with internal server error
+        console.error('Error in /post/add/comment route:', err.message);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
+
+
 module.exports = router;
