@@ -39,6 +39,29 @@ function createUserTable() {
     });
 }
 
+
+function createBlogTable() {
+    const query = `
+    CREATE TABLE IF NOT EXISTS blogs (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        content VARCHAR(2000) NOT NULL,
+        tag VARCHAR(55) NOT NULL,
+        category VARCHAR(55) NOT NULL,
+        username VARCHAR(25) NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );    
+`;
+
+    client.query(query, (error, result) => {
+        if (error) {
+            console.log(`Error creating blogs table: ${error}`);
+        } else {
+            console.log(`Created blogs table successfully!`);
+        }
+    });
+}
+
 /**
  * Checking whether the application is connected to the database or not
  */
@@ -47,6 +70,7 @@ client.connect()
         console.log('Connected to PostgreSQL database!');
         // Creating user table
         createUserTable();
+        createBlogTable();
     })
     .catch((err) => {
         console.log(`Error connecting to the database: ${err}`);
