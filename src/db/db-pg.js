@@ -66,6 +66,10 @@ function createBlogTable() {
     });
 }
 
+
+/**
+ * Function to create comments table
+ */
 function createCommentsTables() {
     const query = `
     CREATE TABLE IF NOT EXISTS blog_comments (

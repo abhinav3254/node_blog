@@ -2,6 +2,7 @@ const client = require('../db/db-pg');
 const PaginatedBlogDto = require('../dto/PaginatedBlogDto')
 
 
+
 /**
  * Retrieves paginated blogs from the database.
  *
@@ -22,13 +23,13 @@ async function getPaginatedBlogs(page, pageSize) {
         // Executing the query to retrieve paginated blogs
         const result = await client.query(query, [pageSize, offset]);
 
-        // Level 4: Calculate Total Pages
+        // Level 4: Calculate Total Pages and Total Blogs
         const totalBlogs = result.rowCount;
         const totalPages = Math.ceil(totalBlogs / pageSize);
 
         // Level 5: Success Response
-        // Returning a PaginatedBlogDto object
-        return new PaginatedBlogDto('success', page, totalPages, result.rows);
+        // Returning a PaginatedBlogDto object with totalBlogs and pageSize information
+        return new PaginatedBlogDto('success', page, totalPages, totalBlogs, pageSize, result.rows);
 
     } catch (err) {
         // Level 6: Error Handling
@@ -37,6 +38,7 @@ async function getPaginatedBlogs(page, pageSize) {
         throw err; // Re-throw the error to propagate it to the caller
     }
 }
+
 
 
 
