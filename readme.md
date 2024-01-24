@@ -1,6 +1,6 @@
 # Project Name
 
-Blog Application
+Blog Application in Node
 
 [Project Structure](fileStrcuture.md)
 
