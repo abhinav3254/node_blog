@@ -1,4 +1,4 @@
-# Project Name
+# BLOG APPLICATION
 
 Blog Application in Node
 
